@@ -57,6 +57,33 @@ app.post('/api/persons', (req, res) => {
     const id = Math.floor(Math.random() * 1000000)
 
     const person = req.body
+
+    if (!person.name) {
+        return res.status(400).json({
+            error: 'name missing'
+        })
+    }
+
+    if (!person.number) {
+        return res.status(400).json({
+            error: 'number missing'
+        })
+    }
+
+    let arrayContainsName = false
+
+    persons.map(p => {
+        if (p.name === person.name) {
+            arrayContainsName = true
+        }
+    })
+
+    if (arrayContainsName) {
+        return res.status(400).json({
+            error: 'name already added'
+        })
+    }
+
     person.id = id
 
     console.log(person)
