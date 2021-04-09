@@ -9,6 +9,18 @@ app.use(express.json())
 app.use(cors())
 app.use(express.static('build'))
 
+const errorHandler = (error, req, res, next) => {
+    console.log(error.message)
+
+    if (error.message === 'CastError') {
+        return res.status(400).send({ error: 'malformatted id'})
+    }
+
+    next(error)
+}
+
+app.use(errorHandler)
+
 let persons = [
     {
         id: 1,
@@ -59,7 +71,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
             res.status(204).end()
         })
         .catch(error => {
-            console.log(error)
+            next(error)
         })
 })
 
