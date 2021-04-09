@@ -61,43 +61,29 @@ app.delete('/api/persons/:id', (req, res) => {
 })
 
 app.post('/api/persons', (req, res) => {
-    const id = Math.floor(Math.random() * 1000000)
+    const body = req.body
+    console.log(body)
 
-    const person = req.body
-
-    if (!person.name) {
+    if (body.name === undefined) {
         return res.status(400).json({
             error: 'name missing'
         })
     }
 
-    if (!person.number) {
+    if (body.number === undefined) {
         return res.status(400).json({
             error: 'number missing'
         })
     }
 
-    let arrayContainsName = false
-
-    persons.map(p => {
-        if (p.name === person.name) {
-            arrayContainsName = true
-        }
+    const person = new Person({
+        name: body.name,
+        number: body.number,
     })
 
-    if (arrayContainsName) {
-        return res.status(400).json({
-            error: 'name already added'
-        })
-    }
-
-    person.id = id
-
-    console.log(person)
-
-    persons = persons.concat(person)
-
-    res.json(person)
+    person.save().then(savedPerson => {
+        res.json(savedPerson)
+    })
 })
 
 const PORT = process.env.PORT
