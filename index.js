@@ -4,10 +4,41 @@ const cors = require('cors')
 const express = require('express')
 const app = express()
 const Person = require('./models/person')
+const morgan = require('morgan')
 
 app.use(express.json())
 app.use(cors())
 app.use(express.static('build'))
+app.use(morgan(':method :url :status :response-time ms :res[content]'))
+morgan('tiny')
+
+const persons = [
+  {
+  name: "Anna",
+  number: "5928520",
+  id: "60700a0193849c233cead170"
+  },
+  {
+  name: "Vili-Pekka",
+  number: "58982402892",
+  id: "60704c40205d340015b9e672"
+  },
+  {
+  name: "Sateri",
+  number: "548",
+  id: "60707cf12ad53c6c44d81760"
+  },
+  {
+  name: "Santeri",
+  number: "54834232",
+  id: "607087ce698a7e57cc5090f2"
+  },
+  {
+  name: "Juha Uusitalo",
+  number: "890258548",
+  id: "60708afdfcbbd900157c96b5"
+  }
+]
 
 const errorHandler = (error, req, res, next) => {
   console.log(error.message)
